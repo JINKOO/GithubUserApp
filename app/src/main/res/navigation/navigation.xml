@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/remoteSearchFragment">
+
+    <fragment
+        android:id="@+id/remoteSearchFragment"
+        android:name="com.kjk.githubuserapp.ui.remotesearch.RemoteSearchFragment"
+        android:label="RemoteSearchFragment"
+        tools:layout="@layout/fragment_remote_search">
+        <action
+            android:id="@+id/action_remoteSearchFragment_to_localSearchFragment"
+            app:destination="@id/localSearchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/localSearchFragment"
+        android:name="com.kjk.githubuserapp.ui.localsearch.LocalSearchFragment"
+        android:label="localSearchFragment"
+        tools:layout="@layout/fragment_local_search">
+        <action
+            android:id="@+id/action_localSearchFragment_to_remoteSearchFragment"
+            app:destination="@id/remoteSearchFragment" />
+    </fragment>
+</navigation>
