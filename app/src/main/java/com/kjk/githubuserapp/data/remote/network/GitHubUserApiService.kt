@@ -18,7 +18,6 @@ interface GitHubUserApiService {
     @GET("user")
     suspend fun getAllUsers(
         @Header("accept") accept: String = "application/vnd.github+json",
-//        @Header("Authorization:") auth: String = "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",
         @Query("q") searchName: String = "jinkoo",
         @Query("sort") sort: String = "followers",
         @Query("order") order: String = "asc",
