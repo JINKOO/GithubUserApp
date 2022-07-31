@@ -7,8 +7,7 @@ fun List<UserResponse>.toUserEntity(): List<UserEntity> {
     return map {
         UserEntity(
             profileImageUrl = it.userProfileUrl,
-            name = it.loginId,
-            isFavorite = false
+            name = it.loginId
         )
     }
 }
