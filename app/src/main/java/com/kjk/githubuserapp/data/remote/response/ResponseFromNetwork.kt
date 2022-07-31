@@ -14,7 +14,7 @@ data class UserResponse(
     @SerializedName("login")
     val loginId: String,  // "jinkoo86"
     @SerializedName("id")
-    val idNumber: Int,  // 66558109,
+    val idNumber: Long,  // 66558109,
     @SerializedName("node_id")
     val nodeId: String, // "MDQ6VXNlcjY2NTU4MTA5",
     @SerializedName("avatar_url")

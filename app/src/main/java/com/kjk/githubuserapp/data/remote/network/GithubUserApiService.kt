@@ -7,24 +7,26 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-private const val BASE_URL = "https://api.github.com/search/"
+private const val BASE_URL = "https://api.github.com/"
+
 
 private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
+
 interface GitHubUserApiService {
-    @GET("user")
-    suspend fun getAllUsers(
-        @Header("accept") accept: String = "application/vnd.github+json",
-        @Query("q") searchName: String = "jinkoo",
-        @Query("sort") sort: String = "followers",
-        @Query("order") order: String = "asc",
+    @GET("search/users")
+    suspend fun searchUsers(
+        @Query("q") searchName: String,
+        @Query("sort") sort: String = "",
+        @Query("order") order: String = "",
         @Query("per_page") perPage: Int = 100,
         @Query("page") page: Int = 1
     ): ResponseFromNetwork
 }
+
 
 object GithubUserApi {
     val gitHubUserApiService: GitHubUserApiService by lazy {

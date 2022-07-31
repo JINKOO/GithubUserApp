@@ -1,17 +1,21 @@
 package com.kjk.githubuserapp.ui.util
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.kjk.githubuserapp.domain.UserEntity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.kjk.githubuserapp.R
+import com.kjk.githubuserapp.domain.GithubUserVO
 import com.kjk.githubuserapp.ui.adapter.UserAdapter
 import com.kjk.githubuserapp.ui.remotesearch.ApiStatus
 
 @BindingAdapter("user_list")
-fun setUserList(recyclerView: RecyclerView, users: List<UserEntity>?) {
+fun setUserList(recyclerView: RecyclerView, githubUsers: List<GithubUserVO>?) {
     val adapter = recyclerView.adapter as UserAdapter
-    users?.let {
+    githubUsers?.let {
         adapter.updateList(it)
     }
 }
@@ -30,5 +34,21 @@ fun setProgressBar(progressBar: ProgressBar, apiStatus: ApiStatus?) {
                 View.GONE
             }
         }
+    }
+}
+
+@BindingAdapter("user_profile_image")
+fun setUserProfileImage(imageView: ImageView, imageUrl: String?) {
+    imageUrl?.let {
+        Glide.with(imageView.context)
+            .load(imageUrl)
+            .apply(
+                RequestOptions()
+                    .placeholder(R.drawable.ic_baseline_account_circle_24)
+                    .error(R.drawable.ic_baseline_broken_image_24)
+            )
+            .centerCrop()
+            .circleCrop()
+            .into(imageView)
     }
 }

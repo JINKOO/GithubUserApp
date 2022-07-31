@@ -1,4 +1,4 @@
-package com.kjk.githubuserapp.ui.remotesearch
+package com.kjk.githubuserapp.ui.localsearch
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,17 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kjk.githubuserapp.domain.GithubUserVO
 import com.kjk.githubuserapp.repo.GithubUserRepository
+import com.kjk.githubuserapp.ui.remotesearch.ApiStatus
 import kotlinx.coroutines.launch
 
-class RemoteSearchViewModel : ViewModel() {
+class LocalSearchViewModel : ViewModel() {
 
 
     private val repository = GithubUserRepository.getInstance()
 
 
-    private val _users = MutableLiveData<List<GithubUserVO>>()
-    val users: LiveData<List<GithubUserVO>>
-        get() = _users
+    val favoriteUsers = viewModelScope.launch {
+        repository.getFavoriteUserFromLocal()
+    }
 
 
     private val _apiStatus = MutableLiveData<ApiStatus>()
@@ -35,18 +36,18 @@ class RemoteSearchViewModel : ViewModel() {
         get() = _showMessageEvent
 
 
-    private fun searchUsers(searchKeyword: String) {
-        viewModelScope.launch {
-            _apiStatus.value = ApiStatus.LOADING
-            try {
-                _users.value = repository.getUsersFromNetwork(searchKeyword)
-                _apiStatus.value = ApiStatus.DONE
-            } catch (e: Exception) {
-                _apiStatus.value = ApiStatus.ERROR
-                Log.d(TAG, "loadUsers: ${e.message}")
-            }
-        }
-    }
+
+//    private fun searchUsers(searchKeyword: String) {
+//        viewModelScope.launch {
+//            try {
+//                _users.value = repository.getFavoriteUserFromLocal(searchKeyword)
+//                _apiStatus.value = ApiStatus.DONE
+//            } catch (e: Exception) {
+//                _apiStatus.value = ApiStatus.ERROR
+//                Log.d(TAG, "loadUsers: ${e.message}")
+//            }
+//        }
+//    }
 
 
     fun setSearchKeyword(searchKeyword: String) {
@@ -58,33 +59,12 @@ class RemoteSearchViewModel : ViewModel() {
         if (_searchKeyword.value == null) {
             _showMessageEvent.value = true
         } else {
-            searchUsers(_searchKeyword.value ?: "")
+            //searchUsers(_searchKeyword.value ?: "")
         }
     }
 
 
-    fun showMessageEventDone() {
-        _showMessageEvent.value = false
-    }
-
-
-    fun deleteFavoriteUser(githubUserVO: GithubUserVO) {
-
-    }
-
-
-    fun addFavoriteUser(githubUserVO: GithubUserVO) {
-
-    }
-
-
     companion object {
-        private const val TAG = "RemoteSearchViewModel"
+        private const val TAG = "LocalSearchViewModel"
     }
-}
-
-enum class ApiStatus {
-    LOADING,
-    DONE,
-    ERROR
 }

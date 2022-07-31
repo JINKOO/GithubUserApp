@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5526041666666667" />
         <entry key="app/src/main/res/layout/fragment_local_search.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_remote_search.xml" value="0.5666666666666667" />
+        <entry key="app/src/main/res/layout/list_user_item.xml" value="0.3828125" />
         <entry key="app/src/main/res/layout/user_list_item.xml" value="0.32708333333333334" />
       </map>
     </option>

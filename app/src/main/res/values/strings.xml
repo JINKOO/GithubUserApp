@@ -2,4 +2,7 @@
     <string name="app_name">GithubUserApp</string>
     <string name="tab_title_api">API</string>
     <string name="tab_title_local">LOCAL</string>
+    <string name="user_search_hint">사용자 아이디를 입력하세요.</string>
+    <string name="search_leyword_empty_toast_message">검색어를 입력해주세요~</string>
+    <string name="empty_favorite_list_textview">즐겨찾기를 설정한 사용자가 없습니다.</string>
 </resources>
