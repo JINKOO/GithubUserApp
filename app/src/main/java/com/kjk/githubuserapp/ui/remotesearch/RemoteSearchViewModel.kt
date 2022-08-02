@@ -35,6 +35,11 @@ class RemoteSearchViewModel : ViewModel() {
         get() = _showMessageEvent
 
 
+    private val _hideKeyboardEvent = MutableLiveData<Boolean>()
+    val hideKeyboardEvent: LiveData<Boolean>
+        get() = _hideKeyboardEvent
+
+
     private fun searchUsers(searchKeyword: String) {
         viewModelScope.launch {
             _apiStatus.value = ApiStatus.LOADING
@@ -58,6 +63,7 @@ class RemoteSearchViewModel : ViewModel() {
         if (_searchKeyword.value == null) {
             _showMessageEvent.value = true
         } else {
+            _hideKeyboardEvent.value = true
             searchUsers(_searchKeyword.value ?: "")
         }
     }
@@ -69,13 +75,22 @@ class RemoteSearchViewModel : ViewModel() {
 
 
     fun deleteFavoriteUser(githubUserVO: GithubUserVO) {
-
+        viewModelScope.launch {
+            repository.deleteFavoriteUser(githubUserVO)
+        }
     }
 
 
     fun addFavoriteUser(githubUserVO: GithubUserVO) {
-
+        viewModelScope.launch {
+            repository.addFavoriteUser(githubUserVO)
+        }
     }
+
+    fun hideKeyboradDone() {
+        _hideKeyboardEvent.value = false
+    }
+
 
 
     companion object {

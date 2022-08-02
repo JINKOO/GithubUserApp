@@ -1,8 +1,11 @@
 package com.kjk.githubuserapp.ui.util
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -52,3 +55,26 @@ fun setUserProfileImage(imageView: ImageView, imageUrl: String?) {
             .into(imageView)
     }
 }
+
+
+@BindingAdapter("empty_favorite_list_text")
+fun setEmptyFavoriteListText(textView: TextView, user: List<GithubUserVO>?) {
+    user?.let {
+        textView.visibility = if (user.isNullOrEmpty()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+}
+
+
+@BindingAdapter("fill_favorite_star")
+fun setFavoriteState(imageView: ImageView, isChecked: Boolean?) {
+    isChecked?.let {
+        Log.d(TAG, "setFavoriteState: ${it}")
+        imageView.isSelected = it
+    }
+}
+
+private val TAG = "BindingAdapter"

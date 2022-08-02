@@ -1,5 +1,8 @@
 package com.kjk.githubuserapp.ui.remotesearch
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,7 +10,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,22 +25,35 @@ import com.kjk.githubuserapp.ui.adapter.UserAdapter
 
 class RemoteSearchFragment : Fragment() {
 
+
     private lateinit var binding: FragmentRemoteSearchBinding
+
 
     private lateinit var viewModel: RemoteSearchViewModel
 
+
     private val userAdapter: UserAdapter by lazy {
-        UserAdapter(OnItemClickListener {
-            Log.d(TAG, "clickListener : ${it.name}, ${it.isFavorite}")
-            if (it.isFavorite) {
+        UserAdapter(OnItemClickListener { user, favoriteImageView ->
+            if (user.isFavorite) {
                 // 즐겨찾기 해제
-                viewModel.deleteFavoriteUser(it)
+                user.isFavorite = false
+                favoriteImageView.apply {
+                    isSelected = false
+                    setColorFilter(R.color.yellow)
+                }
+                viewModel.deleteFavoriteUser(user)
             } else {
                 // 즐겨찾기 추가
-                viewModel.addFavoriteUser(it)
+                user.isFavorite = true
+                favoriteImageView.apply {
+                    isSelected = true
+                    setColorFilter(R.color.white)
+                }
+                viewModel.addFavoriteUser(user)
             }
         })
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +69,7 @@ class RemoteSearchFragment : Fragment() {
 
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +98,13 @@ class RemoteSearchFragment : Fragment() {
         viewModel.showMessageEvent.observe(viewLifecycleOwner) { toShow ->
             if (toShow) {
                 showToastMessage()
+                viewModel.showMessageEventDone()
+            }
+        }
+
+        viewModel.hideKeyboardEvent.observe(viewLifecycleOwner) { toHide ->
+            if (toHide) {
+                hideKeyboard()
                 viewModel.showMessageEventDone()
             }
         }
@@ -125,7 +151,15 @@ class RemoteSearchFragment : Fragment() {
     }
 
 
+    private fun hideKeyboard() {
+        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.keywordEdittext.windowToken, 0)
+    }
+
+
     companion object {
         private const val TAG = "RemoteSearchFragment"
+
+        fun newInstance() = RemoteSearchFragment()
     }
 }

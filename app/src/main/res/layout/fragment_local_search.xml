@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/keyword_edittext"
-             />
+            app:user_list="@{viewModel.favoriteUsers}"/>
 
         <TextView
             android:id="@+id/empty_favorite_list_textview"
@@ -58,6 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:empty_favorite_list_text="@{viewModel.favoriteUsers}"
             android:text="@string/empty_favorite_list_textview"/>
 
         <ProgressBar

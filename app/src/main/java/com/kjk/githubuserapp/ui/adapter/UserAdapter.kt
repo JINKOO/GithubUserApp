@@ -2,6 +2,7 @@ package com.kjk.githubuserapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kjk.githubuserapp.R
@@ -14,16 +15,13 @@ class UserAdapter(
 
     private var githubUserList: List<GithubUserVO> = emptyList()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         return UserViewHolder.from(parent)
     }
 
-
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         holder.bind(githubUserList[position], callBackListener)
     }
-
 
     override fun getItemCount() = githubUserList.size
 
@@ -40,10 +38,11 @@ class UserAdapter(
         fun bind(githubUserVO: GithubUserVO, callBackListener: OnItemClickListener) {
             binding.apply {
                 user = githubUserVO
+                clickListener = callBackListener
+                imageview = favoriteCheckbox
                 executePendingBindings()
             }
         }
-
 
         companion object {
             fun from(parent: ViewGroup): UserViewHolder {
@@ -60,8 +59,9 @@ class UserAdapter(
     }
 }
 
+
 class OnItemClickListener(
-    private val callBackListener: (githubUserVO: GithubUserVO) -> Unit
+    private val callBackListener: (githubUserVO: GithubUserVO, isChecked: ImageView) -> Unit
 ) {
-    fun itemClickListener(githubUserVO: GithubUserVO) = callBackListener(githubUserVO)
+    fun itemClickListener(githubUserVO: GithubUserVO, isChecked: ImageView) = callBackListener(githubUserVO, isChecked)
 }

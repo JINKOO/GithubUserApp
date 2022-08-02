@@ -2,59 +2,43 @@ package com.kjk.githubuserapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.kjk.githubuserapp.databinding.ActivityMainBinding
-import com.kjk.githubuserapp.ui.localsearch.LocalSearchFragmentDirections
-import com.kjk.githubuserapp.ui.remotesearch.RemoteSearchFragment
-import com.kjk.githubuserapp.ui.remotesearch.RemoteSearchFragmentDirections
+import com.kjk.githubuserapp.ui.adapter.FragmentAdapter
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val fragmentAdapter: FragmentAdapter by lazy {
+        FragmentAdapter(this@MainActivity)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        binding.tabLayout.apply {
-            addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    when(tab!!.position) {
-                        0 -> {
-                            moveToRemoteSearchFragment()
-                        }
-                        1 -> {
-                            moveToLocalSearchFragment()
-                        }
+        binding.viewPager2.apply {
+            adapter = fragmentAdapter
+        }
+
+        binding.apply {
+            TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+                when (position) {
+                    0 -> {
+                        tab.text = getString(R.string.tab_api_title)
+                    }
+                    1 -> {
+                        tab.text = getString(R.string.tab_local_title)
                     }
                 }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                }
-            })
+            }.attach()
         }
-    }
-
-    private fun moveToRemoteSearchFragment() {
-        Log.d(TAG, "moveToRemoteSearchFragment: ")
-        this.findNavController(R.id.nav_host_fragment)
-            .navigate(LocalSearchFragmentDirections.actionLocalSearchFragmentToRemoteSearchFragment())
-    }
-
-    private fun moveToLocalSearchFragment() {
-        this.findNavController(R.id.nav_host_fragment)
-            .navigate(RemoteSearchFragmentDirections.actionRemoteSearchFragmentToLocalSearchFragment())
     }
 
     companion object {
         private const val TAG = "MainActivity"
     }
-
 }

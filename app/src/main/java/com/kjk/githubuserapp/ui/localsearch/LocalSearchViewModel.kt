@@ -16,9 +16,7 @@ class LocalSearchViewModel : ViewModel() {
     private val repository = GithubUserRepository.getInstance()
 
 
-    val favoriteUsers = viewModelScope.launch {
-        repository.getFavoriteUserFromLocal()
-    }
+    var favoriteUsers: LiveData<List<GithubUserVO>> = repository.getFavoriteUserFromLocal()
 
 
     private val _apiStatus = MutableLiveData<ApiStatus>()
@@ -37,17 +35,17 @@ class LocalSearchViewModel : ViewModel() {
 
 
 
-//    private fun searchUsers(searchKeyword: String) {
-//        viewModelScope.launch {
-//            try {
-//                _users.value = repository.getFavoriteUserFromLocal(searchKeyword)
-//                _apiStatus.value = ApiStatus.DONE
-//            } catch (e: Exception) {
-//                _apiStatus.value = ApiStatus.ERROR
-//                Log.d(TAG, "loadUsers: ${e.message}")
-//            }
-//        }
-//    }
+    private fun searchUsers(searchKeyword: String) {
+        viewModelScope.launch {
+            try {
+                //_users.value = repository.getFavoriteUserFromLocal(searchKeyword)
+                _apiStatus.value = ApiStatus.DONE
+            } catch (e: Exception) {
+                _apiStatus.value = ApiStatus.ERROR
+                Log.d(TAG, "loadUsers: ${e.message}")
+            }
+        }
+    }
 
 
     fun setSearchKeyword(searchKeyword: String) {
@@ -60,6 +58,12 @@ class LocalSearchViewModel : ViewModel() {
             _showMessageEvent.value = true
         } else {
             //searchUsers(_searchKeyword.value ?: "")
+        }
+    }
+
+    fun deleteFavoriteUser(githubUserVO: GithubUserVO) {
+        viewModelScope.launch {
+            repository.deleteFavoriteUser(githubUserVO)
         }
     }
 

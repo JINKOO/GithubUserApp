@@ -4,14 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="user"
             type="com.kjk.githubuserapp.domain.GithubUserVO" />
+
+        <variable
+            name="clickListener"
+            type="com.kjk.githubuserapp.ui.adapter.OnItemClickListener" />
+
+        <variable
+            name="imageview"
+            type="android.widget.ImageView" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.itemClickListener(user, imageview)}">
 
         <ImageView
             android:id="@+id/profile_imageview"
@@ -20,34 +30,36 @@
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="@dimen/margin_default"
             android:layout_marginBottom="@dimen/margin_default"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:user_profile_image="@{user.profileImageUrl}"
-            tools:src="@drawable/ic_baseline_account_circle_24"/>
+            tools:src="@drawable/ic_baseline_account_circle_24" />
 
         <TextView
             android:id="@+id/name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/profile_imageview"
-            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{user.name}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/favorite_checkbox"
-            android:text="@{user.name}"
-            tools:text="김드라마"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
-        <CheckBox
-            android:id="@+id/favorite_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/profile_imageview"
             app:layout_constraintTop_toTopOf="parent"
+            tools:text="김드라마" />
+
+        <ImageView
+            android:id="@+id/favorite_checkbox"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:src="@drawable/favorite_star_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/margin_default"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:fill_favorite_star="@{user.isFavorite}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

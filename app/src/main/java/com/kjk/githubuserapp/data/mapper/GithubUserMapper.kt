@@ -20,6 +20,20 @@ fun List<UserResponse>.toGithubUserVOList(): List<GithubUserVO> {
 
 
 /**
+ * network response object -> database object
+ */
+//fun List<UserResponse>.toGithubUserEntityList(): List<GithubUserEntity> {
+//    return map {
+//        GithubUserEntity(
+//            idNumber = it.idNumber,
+//            profileImageUrl = it.userProfileUrl,
+//            name = it.loginId
+//        )
+//    }
+//}
+
+
+/**
  *  database object -> domain object
  */
 fun GithubUserEntity.toGithubUserVO(): GithubUserVO {
