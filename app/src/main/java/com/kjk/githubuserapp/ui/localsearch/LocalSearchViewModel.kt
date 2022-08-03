@@ -7,25 +7,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kjk.githubuserapp.domain.GithubUserVO
 import com.kjk.githubuserapp.repo.GithubUserRepository
-import com.kjk.githubuserapp.ui.remotesearch.ApiStatus
 import kotlinx.coroutines.launch
 
+/**
+ *  LocalSearchFragment의 UI Data를 관리하는 viewModel
+ *  Repository singleton객체를 통해, 필요한 data를 fetch한 후,
+ *  UI controller에 보여준다.
+ */
 class LocalSearchViewModel : ViewModel() {
 
 
     private val repository = GithubUserRepository.getInstance()
 
 
-    var favoriteUsers: LiveData<List<GithubUserVO>> = repository.getFavoriteUserFromLocal()
-
-
-    private val _apiStatus = MutableLiveData<ApiStatus>()
-    val apiStatus: LiveData<ApiStatus>
-        get() = _apiStatus
-
-
     private val _searchKeyword = MutableLiveData<String?>()
-    val serachKeyword: LiveData<String?>
+    val searchKeyword: LiveData<String?>
         get() = _searchKeyword
 
 
@@ -34,30 +30,56 @@ class LocalSearchViewModel : ViewModel() {
         get() = _showMessageEvent
 
 
+    private val _hideKeyboardEvent = MutableLiveData<Boolean>()
+    val hideKeyboardEvent: LiveData<Boolean>
+        get() = _hideKeyboardEvent
+
+
+    private val _loadType = MutableLiveData<LoadType>()
+    val loadType: LiveData<LoadType>
+        get() = _loadType
+
+
+    var favoriteUsers: LiveData<List<GithubUserVO>>? = null
+    var searchedUsers: LiveData<List<GithubUserVO>>? = null
+
+
+    init {
+        loadFavoriteUsersFromLocal()
+    }
+
+    fun loadFavoriteUsersFromLocal() {
+        viewModelScope.launch {
+            _loadType.value = LoadType.LOAD_ALL
+            try {
+                favoriteUsers = repository.getFavoriteUserFromLocal()
+            } catch (e: Exception) {
+                Log.d(TAG, "loadFavoriteUsersFromLocal: ${e.message}")
+            }
+        }
+    }
 
     private fun searchUsers(searchKeyword: String) {
+        _loadType.value = LoadType.LOAD_SEARCHED_RESULT
         viewModelScope.launch {
             try {
-                //_users.value = repository.getFavoriteUserFromLocal(searchKeyword)
-                _apiStatus.value = ApiStatus.DONE
+                searchedUsers = repository.getResultFavoriteUser(searchKeyword)
             } catch (e: Exception) {
-                _apiStatus.value = ApiStatus.ERROR
                 Log.d(TAG, "loadUsers: ${e.message}")
             }
         }
     }
 
-
     fun setSearchKeyword(searchKeyword: String) {
         _searchKeyword.value = searchKeyword
     }
 
-
     fun searchButtonClickEvent() {
-        if (_searchKeyword.value == null) {
+        if (_searchKeyword.value.isNullOrEmpty()) {
             _showMessageEvent.value = true
         } else {
-            //searchUsers(_searchKeyword.value ?: "")
+            _hideKeyboardEvent.value = true
+            searchUsers(_searchKeyword.value ?: "")
         }
     }
 
@@ -67,8 +89,21 @@ class LocalSearchViewModel : ViewModel() {
         }
     }
 
+    fun showMessageEventDone() {
+        _showMessageEvent.value = false
+    }
+
+    fun hideKeyboardDone() {
+        _hideKeyboardEvent.value = false
+    }
+
 
     companion object {
         private const val TAG = "LocalSearchViewModel"
     }
+}
+
+enum class LoadType {
+    LOAD_ALL,
+    LOAD_SEARCHED_RESULT
 }

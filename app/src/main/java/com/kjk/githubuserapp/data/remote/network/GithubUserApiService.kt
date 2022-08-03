@@ -7,15 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-private const val BASE_URL = "https://api.github.com/"
-
-
-private val retrofit = Retrofit.Builder()
-    .baseUrl(BASE_URL)
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-
-
+/**
+ *  retrofit service interface
+ */
 interface GitHubUserApiService {
     @GET("search/users")
     suspend fun searchUsers(
@@ -27,8 +21,19 @@ interface GitHubUserApiService {
     ): ResponseFromNetwork
 }
 
-
+/**
+ *  application 전역에서 공통된 instance를 사용할 수 있도록,
+ *  retrofit instance를 생성
+ */
 object GithubUserApi {
+
+    private const val BASE_URL = "https://api.github.com/"
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
     val gitHubUserApiService: GitHubUserApiService by lazy {
         retrofit.create(GitHubUserApiService::class.java)
     }

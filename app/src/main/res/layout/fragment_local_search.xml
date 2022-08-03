@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.kjk.githubuserapp.ui.localsearch.LocalSearchViewModel" />
@@ -44,22 +47,25 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="@dimen/margin_default"
+            app:favorite_user_list="@{viewModel.favoriteUsers}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/keyword_edittext"
-            app:user_list="@{viewModel.favoriteUsers}"/>
+            app:load_type="@{viewModel.loadType}"
+            app:searched_user_list="@{viewModel.searchedUsers}" />
 
         <TextView
             android:id="@+id/empty_favorite_list_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center"
+            android:text="@string/empty_favorite_list_textview"
+            app:empty_favorite_list_text="@{viewModel.favoriteUsers}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:empty_favorite_list_text="@{viewModel.favoriteUsers}"
-            android:text="@string/empty_favorite_list_textview"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -70,6 +76,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

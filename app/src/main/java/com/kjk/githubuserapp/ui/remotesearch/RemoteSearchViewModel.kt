@@ -9,11 +9,14 @@ import com.kjk.githubuserapp.domain.GithubUserVO
 import com.kjk.githubuserapp.repo.GithubUserRepository
 import kotlinx.coroutines.launch
 
+/**
+ *  RemoteSearchFragment의 UI Data를 관리하는 viewModel
+ *  Repository singleton객체를 통해, 필요한 data를 fetch한 후,
+ *  UI controller에 보여준다.
+ */
 class RemoteSearchViewModel : ViewModel() {
 
-
     private val repository = GithubUserRepository.getInstance()
-
 
     private val _users = MutableLiveData<List<GithubUserVO>>()
     val users: LiveData<List<GithubUserVO>>
@@ -60,7 +63,7 @@ class RemoteSearchViewModel : ViewModel() {
 
 
     fun searchButtonClickEvent() {
-        if (_searchKeyword.value == null) {
+        if (_searchKeyword.value.isNullOrEmpty()) {
             _showMessageEvent.value = true
         } else {
             _hideKeyboardEvent.value = true
@@ -87,7 +90,7 @@ class RemoteSearchViewModel : ViewModel() {
         }
     }
 
-    fun hideKeyboradDone() {
+    fun hideKeyboardDone() {
         _hideKeyboardEvent.value = false
     }
 

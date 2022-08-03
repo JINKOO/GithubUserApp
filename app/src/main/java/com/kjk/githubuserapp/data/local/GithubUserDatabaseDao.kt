@@ -3,6 +3,9 @@ package com.kjk.githubuserapp.data.local
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+/**
+ *  Room DAO interface
+ */
 @Dao
 interface GithubUserDatabaseDao {
 
@@ -23,14 +26,14 @@ interface GithubUserDatabaseDao {
     /**
      *  keyword인 사용자 모두 fetch
      */
-    @Query("SELECT * FROM user_table where name = :searchKeyword")
-    fun getUsers(searchKeyword: String): LiveData<List<GithubUserEntity>>
+    @Query("SELECT * FROM user_table WHERE name = :searchKeyword")
+    fun getResultFavoriteUsers(searchKeyword: String): LiveData<List<GithubUserEntity>>
 
 
     /**
      *  favorite에 추가한 사용자를 모두 fetch
      */
-    @Query("SELECT * FROM user_table where isFavorite = 1")
+    @Query("SELECT * FROM user_table WHERE isFavorite = 1 ORDER BY name")
     fun getFavoriteUsers(): LiveData<List<GithubUserEntity>>
 
 

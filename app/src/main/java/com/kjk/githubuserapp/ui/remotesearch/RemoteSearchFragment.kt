@@ -1,39 +1,36 @@
 package com.kjk.githubuserapp.ui.remotesearch
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.ColorFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kjk.githubuserapp.R
 import com.kjk.githubuserapp.databinding.FragmentRemoteSearchBinding
+import com.kjk.githubuserapp.ui.adapter.GithubUserAdapter
 import com.kjk.githubuserapp.ui.adapter.OnItemClickListener
-import com.kjk.githubuserapp.ui.adapter.UserAdapter
 
+
+/**
+ *  remote network로 부터 전달받은 data를 바탕으로
+ *  검색해 사용자에게 보여주는 UI Controller
+ */
 class RemoteSearchFragment : Fragment() {
 
-
     private lateinit var binding: FragmentRemoteSearchBinding
-
-
     private lateinit var viewModel: RemoteSearchViewModel
 
 
-    private val userAdapter: UserAdapter by lazy {
-        UserAdapter(OnItemClickListener { user, favoriteImageView ->
+    private val userAdapter: GithubUserAdapter by lazy {
+        GithubUserAdapter(OnItemClickListener { user, favoriteImageView ->
             if (user.isFavorite) {
                 // 즐겨찾기 해제
                 user.isFavorite = false
@@ -91,10 +88,6 @@ class RemoteSearchFragment : Fragment() {
 
 
     private fun observe() {
-        viewModel.users.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "observe: ${it.size}")
-        })
-
         viewModel.showMessageEvent.observe(viewLifecycleOwner) { toShow ->
             if (toShow) {
                 showToastMessage()
@@ -105,7 +98,7 @@ class RemoteSearchFragment : Fragment() {
         viewModel.hideKeyboardEvent.observe(viewLifecycleOwner) { toHide ->
             if (toHide) {
                 hideKeyboard()
-                viewModel.showMessageEventDone()
+                viewModel.hideKeyboardDone()
             }
         }
     }
@@ -127,16 +120,12 @@ class RemoteSearchFragment : Fragment() {
                     start: Int,
                     count: Int,
                     after: Int
-                ) {
-
-                }
+                ) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    Log.d(TAG, "onTextChanged: ${s.toString()}")
                     viewModel.setSearchKeyword(s.toString())
                 }
 
-                override fun afterTextChanged(s: Editable?) {
-                }
+                override fun afterTextChanged(s: Editable?) {}
             })
         }
     }
