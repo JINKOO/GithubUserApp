@@ -137,6 +137,10 @@ class GithubUserAdapter(
     }
 }
 
+
+/**
+ *  DiffUtillCallBack class
+ */
 class GithubUserDiffUtilCallBack : DiffUtil.ItemCallback<DataItem>() {
     override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
         return oldItem.id == newItem.id
@@ -148,6 +152,11 @@ class GithubUserDiffUtilCallBack : DiffUtil.ItemCallback<DataItem>() {
 }
 
 
+/**
+ *  item클릭이벤트 리스너
+ *  UI Controller에서 item이 클릭되었을 때, 해당 로직을 처리한다.
+ *  즐겨 찾기추가 및 해제가 동작한다.
+ */
 class OnItemClickListener(
     private val callBackListener: (githubUserVO: GithubUserVO, isChecked: ImageView) -> Unit
 ) {
@@ -156,6 +165,9 @@ class OnItemClickListener(
 }
 
 
+/**
+ *  리사이클러뷰의 viewType을 관리하는 클래스
+ */
 sealed class DataItem {
     abstract val id: Long
 
